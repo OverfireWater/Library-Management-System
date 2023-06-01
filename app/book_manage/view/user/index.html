@@ -1,0 +1,440 @@
+﻿<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{$webInfo.webname}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/book_manage/output.css">
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/book_manage/page.css">
+    <link rel="icon" href="/favicon111.ico" type="image/x-icon">
+    <style>
+        .yellow{
+            background-color:#c9974b ;
+        }
+    </style>
+</head>
+
+<body class="bg-grey-lighter font-sans antialiased">
+<div class="fixed bg-grey-lighter pin z-50 flex justify-center items-center" id="loading">
+    <svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink" id="morphing">
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g transform="translate(-1178.000000, -87.000000)">
+                <g transform="translate(1159.000000, 0.000000)">
+                    <g transform="translate(0.000000, 87.000000)">
+                        <g transform="translate(19.000000, 0.000000)">
+                            <circle id="small-circle" fill="#5661B3" cx="30" cy="30" r="30"></circle>
+                            <path id="moon"
+                                  d="M30.5,49.7304688 C40.7172679,49.7304688 30.5,43.266096 30.5,33.0488281 C30.5,22.8315603 40.7172679,12 30.5,12 C20.2827321,12 11.0390625,20.6479665 11.0390625,30.8652344 C11.0390625,41.0825022 20.2827321,49.7304688 30.5,49.7304688 Z"
+                                  fill="#F4E1E0"></path>
+                            <circle id="big-circle" fill="#070707" cx="31" cy="31" r="11"></circle>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </svg>
+</div>
+<div class="bg-indigo-darker text-center p-4 px-6 flex items-center" style="background-color:#5349ae">
+    <div class="hidden lg:block lg:w-1/4 xl:w-1/5 pr-8">
+        <a href="/index.php/book_manage/userView" class="flex justify-start pl-6">
+            <img src="/static/RBAC_server/img/librarycolor_yello.png" style="width:120px;height: 40px!important;" class="" alt="logo">
+        </a>
+    </div>
+    <div class="lg:hidden pr-3" id="mobile-nav-trigger">
+        <div class="toggle p-2 block"><span></span></div>
+    </div>
+    <div class="flex flex-grow items-center lg:w-3/4 xl:w-4/5 coniant">
+        <form action="userView" method="get" id="search_form">
+			<span class="relative w-full" style="width: 300px;">
+				<input type="search" placeholder="搜索" name="keywords" value="{$keywords}" autocomplete="off" id="search"
+                       style="color: white"
+                       class="w-full text-sext-white transition border border-transparent focus:outline-none focus:border-indigo placeholder-white rounded bg-indigo-medium py-1 px-2 pl-10 appearance-none leading-normal ds-input">
+				<div class="absolute search-icon" style="top: .1rem; left: .8rem;">
+					<svg class="fill-current pointer-events-none text-white w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 20 20">
+						<path
+                                d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z">
+						</path>
+					</svg>
+				</div>
+			</span>
+
+        </form>
+        <input type="button" id="search_button" value="搜索" class="input_search text-sm">
+        <div
+                class="login_exit text-sm text-right text-white py-2 px-3  no-underline hidden lg:block lg:w-1/3 px-6">
+            <a class="text-sm text-white hover:text-grey-dark" href="user_login_exit">退出登陆</a></div>
+    </div>
+</div>
+<!-- Main -->
+<div class="flex">
+    <!-- Side Nav -->
+    <nav
+            class="absolute lg:relative lg:flex lg:text-sm bg-indigo-darker lg:bg-transparent pin-l pin-r py-4 px-6 lg:pt-10 lg:pl-12 lg:pr-6 -mt-1 lg:mt-0 overflow-y-auto lg:w-1/5 lg:border-r z-40 hidden">
+        <ul class="list-reset mb-8 w-full">
+            <li class="ml-2 mb-4 flex lg:">
+                <i class="layui-icon layui-icon-home"></i>&nbsp;&nbsp;
+                <div class="hover:cursor-pointer text-white lg:text-indigo-darkest no-underline font-medium"
+                     id="mobile-all_book-trigger">全部图书
+                </div>
+            </li>
+            <li class="ml-2 mb-4">
+
+                <div class="flex" id="sidenav-categories-trigger">
+
+                    <div
+                            class="hover:cursor-pointer text-white lg:text-indigo-darkest no-underline font-medium w-full relative">
+                        类别
+                        <div class="pointer-events-none absolute pin-y pin-r flex items-center px-1 text-grey-darker"
+                             id="sidenav-icon">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 20 20">
+                                <path
+                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <ul class="text-grey lg:text-grey-dark list-reset leading-loose mt-2" id="sidenav-categories">
+                    {foreach $bookType as $val}
+                    <li class="hover:text-indigo-dark hover:cursor-pointer transition-normal ml-1 border-l border-grey-dark pl-4">
+                        <a href="?keywords={$val.BTName}">{$val.BTName}</a>
+                    </li>
+                    {/foreach}
+                </ul>
+            </li>
+
+            <li class="ml-2 mb-4 flex lg:">
+                <i class="layui-icon layui-icon-read"></i>&nbsp;&nbsp;
+                <div class="hover:cursor-pointer text-white lg:text-indigo-darkest no-underline font-medium"
+                     id="mobile-borrow-trigger">我的借阅
+                </div>
+            </li>
+            <li class="ml-2 mb-4 flex lg:">
+                <i class="layui-icon layui-icon-user"></i>&nbsp;&nbsp;
+                <div class="hover:cursor-pointer text-white lg:text-indigo-darkest no-underline font-medium"
+                     id="mobile-person-trigger">个人中心
+                </div>
+            </li>
+            <li class="ml-2 mb-4 flex lg:">
+                <i class="layui-icon layui-icon-user"></i>&nbsp;&nbsp;
+                <div class="hover:cursor-pointer text-white lg:text-indigo-darkest no-underline font-medium"
+                     id="mobile-pwd-trigger">密码修改
+                </div>
+            </li>
+
+        </ul>
+    </nav>
+    <!-- 图书 -->
+    <div class="flex flex-1 flex-col md:px-6 pt-10" id="bookInfo">
+
+        <h4 class="hidden md:inline-block text-grey-dark font-normal">精选图书</h4>
+        <div class="border_line"></div>
+
+        <!-- Library -->
+        <from class="layui-form">
+            <div class="layui-col-md6 width-select">
+                <select id="book_state" lay-filter="select-filter">
+                    <option value="">请选择图书状态</option>
+                    <option value="1">上架</option>
+                    <option value="0">仓库</option>
+                    <option value="2">外借</option>
+                    <option value="3">丢失</option>
+                    <option value="4">报废</option>
+                </select>
+            </div>
+        </from>
+        <div class="hidden px-2 pt-2 md:px-0 flex-wrap order-2 pb-8 js-tab-pane active" id="section-library">
+            {if($bookInfo)}
+            {foreach $bookInfo as $val}
+            <div class="flex flex-row sm:flex-col items-center sm:items-start w-full xs:w-1/2 sm:w-1/3 md:w-1/5 p-4 js-book">
+                <a href="details?b_id={$val.id}&&state={$val.BState}&&borrow=0">
+                    <img src="{$val.BUrl}" alt="book-01" style="width: 141px;height: 180px"
+                         class="w-1/3 sm:w-full shadow-md transition-normal hover:brighter hover:translate-y-1 hover:shadow-lg hover:border-indigo">
+                    <div class="ml-3 sm:ml-0 w-2/3 sm:w-full">
+                        <p class="text-sm my-2 font-medium sm:font-normal" style="height:1.2rem;overflow: hidden">
+                            {$val.BName}</p>
+                        <label for=""
+                               class="hidden sm:inline-block rounded-full text-white px-2 py-1/2 text-xs
+                           {if($val.BState==0)} libre-bg-grey
+                        {elseif ($val.BState==1) /} bg-indigo-medium
+                    {elseif ($val.BState==2) /} libre-bg-yellow
+                    {elseif ($val.BState==3) /} yellow
+                    {else/} red
+                    {/if}
+                    ">
+                            {if($val.BState==0)} <span>仓库</span>
+                            {elseif ($val.BState==1) /} <span >上架</span>
+                            {elseif ($val.BState==2) /}<span>外借</span>
+                            {elseif ($val.BState==3) /}<span>丢失</span>
+                            {else/}<span style="color: #e5e1d6">报废</span>
+                            {/if}</label>
+                    </div>
+                </a>
+            </div>
+            {/foreach}
+            {else} <span>暂无图书</span>
+            {/if}
+        </div>
+        <div class="fiex_page" style="margin-bottom: 20px">
+            <div class="pagination">{$page|raw}</div>
+        </div>
+    </div>
+
+    <!-- 我的借阅 -->
+    <div class="hidden flex-1 flex-col md:px-6 pt-10" id="myborrow_book">
+
+        <h4 class="hidden md:inline-block text-grey-dark font-normal">我的借阅</h4>
+        <div class="border_line"></div>
+        <!-- Library -->
+        <div class="hidden px-2 pt-2 md:px-0 flex-wrap order-2 pb-8 js-tab-pane active" id="section-library">
+            {if(is_array($myborrow_book))}
+            {foreach $myborrow_book as $val}
+            <div class="flex flex-row sm:flex-col items-center sm:items-start w-full xs:w-1/2 sm:w-1/3 md:w-1/5 p-4 js-book">
+                <a href="details?b_id={$val.bookinfo.id}&&state={$val.bookinfo.BState}&&borrow=1">
+                    <img src="{$val.bookinfo.BUrl}" alt="book-01" style="width: 141px;height: 180px"
+                         class="w-1/3 sm:w-full shadow-md transition-normal hover:brighter hover:translate-y-1 hover:shadow-lg hover:border-indigo">
+                    <div class="ml-3 sm:ml-0 w-2/3 sm:w-full">
+                        <p class="text-sm my-2 font-medium sm:font-normal" style="height:1.2rem;overflow: hidden">{$val.bookinfo.BName}</p>
+                        <label for=""
+                               class="hidden sm:inline-block rounded-full text-white px-2 py-1/2 text-xs "
+                               style="background-color: #4fdb2f">
+                            <span>已借</span>
+                        </label>
+                    </div>
+                </a>
+            </div>
+            {/foreach}
+            {else} <span>{$myborrow_book}</span>
+            {/if}
+        </div>
+    </div>
+    <!-- 个人中心 -->
+    <div class="hidden flex-1 flex-col md:px-6 pt-10" id="myperson">
+
+        <h4 class="hidden md:inline-block text-grey-dark font-normal">个人中心</h4>
+        <div class="border_line"></div>
+        <!-- Library -->
+        <div class="hidden px-2 pt-2 md:px-0 flex-wrap order-2 pb-8 js-tab-pane active" style="flex-direction: column"
+             id="section-library">
+            <form class="layui-form" id="form_data" action="" style="width: 30rem;margin-top: 30px">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" value="{$name}" required lay-verify="required"
+                               placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">手机号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="phone" required value="{$phone}" lay-verify="required"
+                               placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" style="outline: none" lay-submit lay-filter="person">立即修改</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- 个人中心 -->
+    <div class="hidden flex-1 flex-col md:px-6 pt-10" id="mypwd">
+
+        <h4 class="hidden md:inline-block text-grey-dark font-normal">修改密码</h4>
+        <div class="border_line"></div>
+        <!-- Library -->
+        <div class="hidden px-2 pt-2 md:px-0 flex-wrap order-2 pb-8 js-tab-pane active" style="flex-direction: column"
+             id="section-library">
+            <form class="layui-form" id="form_data_pwd" action="" style="width: 30rem;margin-top: 30px">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" id="pwd" name="pwd" required lay-verify="required" placeholder="请输入密码"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="width: 90px">确认密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" id="renpwd" name="renpwd" required lay-verify="required"
+                               placeholder="请确认密码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" style="outline: none" lay-submit lay-filter="pwd">立即提交</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- Profile -->
+    <div class="hidden fie absolute pin-b z-10 lg:relative lg:block w-full lg:w-1/5 bg-grey-lighter-2 px-6 pt-10"
+         id="profile"
+         {if($mybook_count==0)} style="height: 500px;"
+         {elseif($mybook_count>=6)} ""
+        {/if}
+        >
+        <div class="flex items-center mb-6">
+            <svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink" id="avatar">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g transform="translate(-1178.000000, -87.000000)">
+                        <g transform="translate(1159.000000, 0.000000)">
+                            <g transform="translate(0.000000, 87.000000)">
+                                <g transform="translate(19.000000, 0.000000)">
+                                    <circle id="small-circle" fill="#5661B3" cx="30" cy="30" r="30"></circle>
+                                    <path id="moon"
+                                          d="M30.5,49.7304688 C40.7172679,49.7304688 30.5,43.266096 30.5,33.0488281 C30.5,22.8315603 40.7172679,12 30.5,12 C20.2827321,12 11.0390625,20.6479665 11.0390625,30.8652344 C11.0390625,41.0825022 20.2827321,49.7304688 30.5,49.7304688 Z"
+                                          fill="#F4E1E0"></path>
+                                    <circle id="big-circle" fill="#070707" cx="31" cy="31" r="11"></circle>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </svg>
+            <div class="ml-3">
+                <p>{$name}</p>
+            </div>
+        </div>
+        <div class="my-4 border-t pt-4">
+            <h3 class="text-indigo-dark font-normal">你借阅了<strong>{$mybook_count}</strong>本图书</h3>
+            <div class="flex flex-wrap -ml-2 justify-start items-center">
+                {if(is_array($myborrow_book))}
+                {foreach $myborrow_book as $val}
+                <img src="{$val.bookinfo.BUrl}" width="58" height="68" alt="read"
+                     class="w-1/6 lg:w-1/5 max-w-tiny shadow-md block m-2 transition-normal hover:brighter">
+                {/foreach}
+                {else} <span style="margin-top: 20px">还没有图书被借阅哦</span>
+                {/if}
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript" src="/static/RBAC_server/js/jquery-1.11.3.min.js"></script>
+
+<script src="/static/book_manage/bundle.js" async defer></script>
+<script src="/static/book_manage/book.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+    $(function () {
+        $("#book_state option[value='{$state}']").prop("selected","selected");
+        $("#search_button").click(function () {
+            $("#search_form").submit();
+        });
+    });
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+        form.on('submit(pwd)', function (data) {
+            var pwd = $("#pwd").val();
+            var renpwd = $("#renpwd").val();
+            if (pwd != null || pwd != "" && renpwd != null || renpwd != "") {
+                if (pwd == renpwd) {
+                    var form_data = new FormData($('#form_data_pwd')[0]);
+                    $.ajax({
+                        type: "post",
+                        url: "user/up_pwd",
+                        data: form_data,
+                        dataType: "json",
+                        processData: false, // 告诉jQuery不要去处理发送的数据
+                        contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+                        success: function (result) {
+                            if (result.code == 0) {
+                                layer.msg(result.msg, {
+                                    icon: 1,
+                                    title: "提示"
+                                });
+                                setTimeout('window.location.reload()', 500);
+                            } else if (result.code == 1) {
+                                layer.msg(result.msg, {
+                                    icon: 0,
+                                    title: "提示"
+                                });
+                            } else if (result.code == 2) {
+                                layer.msg(result.msg, {
+                                    icon: 0,
+                                    title: "提示"
+                                });
+                            }
+
+                        }, error(res) {
+                            if (res.status == 500) {
+                                layer.msg(res.responseJSON.message, {
+                                    icon: 0,
+                                    title: "提示"
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    layer.msg("两次密码不相等,请重新输入");
+                }
+            }
+            return false;
+        });
+        form.on('select(select-filter)',function (data){
+            if (data.value!=""){
+                var url;
+                var value=data.value;
+                url="?keywords={$keywords}&state="+value
+                window.location.href = url;
+            }
+        });
+        form.on('submit(person)', function (data) {
+            var form_data = new FormData($('#form_data')[0]);
+            $.ajax({
+                type: "post",
+                url: "user/up_personal_userinfo",
+                data: form_data,
+                dataType: "json",
+                processData: false, // 告诉jQuery不要去处理发送的数据
+                contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+                success: function (result) {
+                    if (result.code == 0) {
+                        layer.msg(result.msg, {
+                            icon: 1,
+                            title: "提示"
+                        });
+                        setTimeout('window.location.reload()', 500);
+                    } else if (result.code == 1) {
+                        layer.msg(result.msg, {
+                            icon: 0,
+                            title: "提示"
+                        });
+                    } else if (result.code == 2) {
+                        layer.msg(result.msg, {
+                            icon: 0,
+                            title: "提示"
+                        });
+                    }
+
+                }, error(res) {
+                    if (res.status == 500) {
+                        layer.msg(res.responseJSON.message, {
+                            icon: 0,
+                            title: "提示"
+                        });
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+
+</html>
