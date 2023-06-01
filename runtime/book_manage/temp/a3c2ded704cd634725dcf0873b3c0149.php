@@ -1,4 +1,4 @@
-<?php /*a:1:{s:83:"D:\phpstudy_pro\WWW\Library-Management-System\app\book_manage\view\login\index.html";i:1685603302;}*/ ?>
+<?php /*a:1:{s:83:"D:\phpstudy_pro\WWW\Library-Management-System\app\book_manage\view\login\index.html";i:1685627711;}*/ ?>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
@@ -66,7 +66,7 @@
         </div>
         <div class='login_fields__submit'>
             <input type='button' value='登录'>
-            <div class="register_text">没有账号？ <a href="register_data" style="color: #208ce8">点击注册</a></div>
+            <div class="register_text">没有账号？ <a href="/index.php/book_manage/register_data" style="color: #208ce8">点击注册</a></div>
         </div>
     </form>
     </div>
