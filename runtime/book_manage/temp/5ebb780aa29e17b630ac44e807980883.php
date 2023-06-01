@@ -1,0 +1,123 @@
+<?php /*a:1:{s:89:"D:\phpstudy_pro\WWW\Library-Management-System\app\book_manage\view\admin\bookOldInfo.html";i:1684896311;}*/ ?>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="icon" href="/static/RBAC_server/img/librarycolor_yello.png" type="image/x-icon">
+    <script type="text/javascript" src="/static/RBAC_server/js/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <!-- 公共样式 结束 -->
+    <style>
+        a {
+            color: #fff;
+        }
+
+        a:hover {
+            color: #fff;
+        }
+
+        .cBody {
+            margin: 20px;
+        }
+
+        body {
+            zoom: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cBody">
+    <div class="console">
+        <div class="demoTable">
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <input type="text" name="keywords" id="keywords" required lay-verify="required"
+                           placeholder="输入图书名称|捐赠人|ISBN" autocomplete="off" class="layui-input">
+                </div>
+                <button class="layui-btn" id="form_btn" data-type="reload">搜索</button>
+                <button class="layui-btn layui-btn-warm" id="resert" type="reset" data-type="resert">重置</button>
+                <button class="layui-btn layui-btn-normal" type="button" lay-filter="formDemo" onclick="open_layer()">
+                    图书添加
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+</body>
+<script>
+    layui.use(['table', 'layer', 'form'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var form = layui.form;
+        table.render({
+            elem: '#test'
+            , url: 'admin/get_bookOld_data'
+            , title: '用户数据表'
+            , cellMinWidth: 100
+            , cols: [[
+                {field: 'BRRId', title: '序号', fixed: 'left', width: 80, unresize: false, sort: true,align:"center"}
+                , {field: 'Bisbn', title: 'ISBN标准书号',align:"center"}
+                , {field: 'BName', title: '图书名称', width: 140,align:"center"}
+                , {field: 'BerAccount', title: '捐赠人',align:"center"}
+                , {field: 'BRRTime', title: '捐赠时间',align:"center"}
+            ]]
+            , page: true
+            , height: 'full-30'
+            , id: "testreload"
+        });
+        //表格重载
+        var active = {
+            reload: function () {
+                var keywords = $('#keywords');
+
+                //执行重载
+                table.reload('testreload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        keywords: keywords.val()
+                    }
+                });
+            }
+        };
+
+        $('.demoTable #form_btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        $("#resert").click(function (){
+            $("#keywords").val("");
+            table.reload('testreload', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where:{
+                    keywords: ""
+                }
+            });
+        })
+    });
+
+    function open_layer() {
+        layer.open({
+            type: 2,
+            title: "图书添加",
+            content: "admin/addBookInfoView",
+            area: ['800px', '600px'],
+            id: "600",
+        });
+    }
+</script>
+</html>
